@@ -25,18 +25,23 @@ app.use(bodyParser.urlencoded());
 
 // respond to gets from /urls
 
-app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase };
-  res.render("urls", templateVars);
-});
-
-// respond to gets from /urls/new (serves form)
-
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
+app.get("/urls/:id", (req, res) => {
+  let templateVars = { shortURL: req.params.id, urlDatabase};
+  console.log(req.params.id);
+  res.render("urls_view", templateVars);
+});
+
+// respond to gets from /urls/new (serves form)
+
 // resond to posts from /urls
+let urls = { urls: urlDatabase }
+app.get("/urls", (req, res) => {
+  res.render("urls_index", urls);
+});
 
 app.post("/urls", (req, res) => {
   // console.log(req.body.longURL);  // debug statement to see POST parameters
@@ -48,13 +53,17 @@ app.post("/urls", (req, res) => {
 
 });
 
+app.get("/url/:shortURL", (req, res) => {
+  res.render("urls_view");
+
+});
+
 app.get("/u/:shortURL", (req, res) => {
   //console.log(req.params.shortURL);
   let short = req.params.shortURL;
   let longURL = urlDatabase[short];
   if (longURL !== undefined) {
     res.redirect(301, longURL);
-    console.log("fdfdfd");
   } else {
     console.log("Incoming Request to unknown redirect")
   }
@@ -66,7 +75,17 @@ app.post("/urls/:id/delete", (req, res) => {
   //res.send("Ok");         // Respond with 'Ok' (we will replace this)
   let id = req.params.id;
   delete urlDatabase[id];
-  console.log(urlDatabase)
+  console.log("Something was just deleted." + urlDatabase);
+  res.redirect(301, /urls/);
+
+});
+
+app.post("/urls/:id", (req, res) => {
+  // console.log(req.body.longURL);  // debug statement to see POST parameters
+  //res.send("Ok");         // Respond with 'Ok' (we will replace this)
+  let id = req.params.id;
+  console.log(req.body.newURL);
+  urlDatabase[id] = req.body.newURL;
   res.redirect(301, /urls/);
 
 });
