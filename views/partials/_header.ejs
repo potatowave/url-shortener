@@ -1,1 +1,14 @@
-Craiglist URL Shrtnr
+<a href="../urls/">URL Shrtnr</a>
+
+<br>
+
+<% if (username !== undefined) { %>
+  Hello, <%= username %>.  Logout
+<% } else { %>
+
+<form action="/login" method="POST">
+Username <input id="" type="text" name="username" style="width: 100px">
+<input type="submit" value="Submit">
+</form>
+
+<% } %>

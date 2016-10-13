@@ -13,7 +13,7 @@
       <li>
       <%= urls[key] + "  " %>
       <a href="/u/<%= key %>"><%= key %></a>
-      <a href="<%= key %>">Edit</a>
+      <a href="/urls/<%= key %>">Edit</a>
       <form method="POST" action="/urls/<%= key %>/delete">
       <input type="submit" value="Delete">
       </form>

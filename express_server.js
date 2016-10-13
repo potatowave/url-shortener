@@ -3,6 +3,9 @@
 const express = require("express");
 const randStr = require("./randomstring");
 const app = express();
+const Cookies = require('cookies');
+const KeyGrip = require("keygrip")
+const keys = new KeyGrip(['samsung note 7', 'iphone 7'], 'sha256')
 
 // Configuration
 
@@ -21,16 +24,22 @@ var urlDatabase = {
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded());
 
+app.use((req, res, next) => {
+  req.cookies = new Cookies( req, res, { "keys": keys } )
+  next();
+})
+
 // Routing
 
 // respond to gets from /urls
 
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  let templateVars = { shortURL: req.params.id, username: req.cookies.get("username"), urlDatabase};
+  res.render("urls_new", templateVars);
 });
 
 app.get("/urls/:id", (req, res) => {
-  let templateVars = { shortURL: req.params.id, urlDatabase};
+  let templateVars = { shortURL: req.params.id, username: req.cookies.get("username"), urlDatabase};
   console.log(req.params.id);
   res.render("urls_view", templateVars);
 });
@@ -38,9 +47,10 @@ app.get("/urls/:id", (req, res) => {
 // respond to gets from /urls/new (serves form)
 
 // resond to posts from /urls
-let urls = { urls: urlDatabase }
+
 app.get("/urls", (req, res) => {
-  res.render("urls_index", urls);
+  let templateVars = { urls: urlDatabase, username: req.cookies.get("username") }
+  res.render("urls_index", templateVars);
 });
 
 app.post("/urls", (req, res) => {
@@ -54,9 +64,11 @@ app.post("/urls", (req, res) => {
 });
 
 app.get("/url/:shortURL", (req, res) => {
-  res.render("urls_view");
+  let templateVars = { urls: urlDatabase, username: req.cookies.get("username") }
+  res.render("urls_view", templateVars);
 
 });
+
 
 app.get("/u/:shortURL", (req, res) => {
   //console.log(req.params.shortURL);
@@ -65,8 +77,17 @@ app.get("/u/:shortURL", (req, res) => {
   if (longURL !== undefined) {
     res.redirect(301, longURL);
   } else {
-    console.log("Incoming Request to unknown redirect")
+    console.log("Incoming Request to unknown redirect " + short);
   }
+
+});
+
+app.post("/login", (req, res) => {
+
+  let userName = req.body.username;
+  req.cookies.set("username", userName);
+  res.redirect("/urls/");
+  console.log(userName);
 
 });
 
@@ -81,8 +102,7 @@ app.post("/urls/:id/delete", (req, res) => {
 });
 
 app.post("/urls/:id", (req, res) => {
-  // console.log(req.body.longURL);  // debug statement to see POST parameters
-  //res.send("Ok");         // Respond with 'Ok' (we will replace this)
+
   let id = req.params.id;
   console.log(req.body.newURL);
   urlDatabase[id] = req.body.newURL;
