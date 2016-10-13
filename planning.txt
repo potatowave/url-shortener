@@ -1,0 +1,21 @@
+Web Server:
+
+ - To access views to edit URL's
+
+
+Pages/Views:
+ - List View
+ - Edit View
+ - Add View
+
+
+Functions:
+
+ - Generate a unique ID for a tiny URL
+
+
+Dependencies:
+
+ - EJS
+ - request
+ - body-parser
