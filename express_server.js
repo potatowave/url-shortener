@@ -64,7 +64,7 @@ app.post("/urls", (req, res) => {
 });
 
 app.get("/url/:shortURL", (req, res) => {
-  let templateVars = { urls: urlDatabase, username: req.cookies.get("username") }
+  let templateVars = { urls: urlDatabase, username: req.cookies.get() }
   res.render("urls_view", templateVars);
 
 });
@@ -88,6 +88,13 @@ app.post("/login", (req, res) => {
   req.cookies.set("username", userName);
   res.redirect("/urls/");
   console.log(userName);
+
+});
+
+app.post("/logout", (req, res) => {
+
+  res.clearCookie("username");
+  res.redirect("/urls/");
 
 });
 
