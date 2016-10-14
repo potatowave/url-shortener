@@ -18,7 +18,8 @@ app.set('view engine', 'ejs'); // Set View Engine to ejs
 
 var urlDatabase = {
             "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userid: "3k3k33" },
-            "9sm5xK": { longURL: "http://www.google.com", userid: "3k3k33" }   };
+            "9sm5xK": { longURL: "http://www.google.com", userid: "3k3k33" } ,
+            "3fkf0d": { longURL: "http://www.frogs.com", userid: "3k3k33" } };
 
 var users = { "3k3k33": { id: "3k3k33",  email: "kinetic@icloud.com", password: "lighthouse"} };
 
@@ -55,7 +56,7 @@ app.post("/urls/register", (req, res) => {
 
     users[id] = { id: id, email: email , password: password };
     req.cookies.set("userid", id);
-    res.redirect('urls/');
+    res.redirect('/urls');
 
   }
 
@@ -79,7 +80,7 @@ app.get("/urls/new", (req, res) => {
 // resond to posts from /urls
 
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase, userid: req.cookies.get("userid") }
+  let templateVars = { urls: urlDatabase, userid: req.cookies.get("userid"), users: users }
   res.render("urls_index", templateVars);
 });
 
@@ -93,8 +94,19 @@ app.post("/urls", (req, res) => {
 
 });
 
+app.post("/urls/edit", (req, res) => {
+  // console.log(req.body.longURL);  // debug statement to see POST parameters
+  //res.send("Ok");         // Respond with 'Ok' (we will replace this)
+  const tinyString = req.body.shortURL;
+  const newURL = req.body.newURL;
+  urlDatabase[tinyString].longURL = newURL ;
+  console.log(urlDatabase);
+  res.redirect('/urls/');
+
+});
+
 app.get("/url/:shortURL", (req, res) => {
-  let templateVars = { urls: urlDatabase, userid: req.cookies.get() }
+  let templateVars = { urls: urlDatabase, userid: req.cookies.get("userid"), users: users };
   res.render("urls_view", templateVars);
 
 });
@@ -103,7 +115,7 @@ app.get("/url/:shortURL", (req, res) => {
 app.get("/u/:shortURL", (req, res) => {
   //console.log(req.params.shortURL);
   let short = req.params.shortURL;
-  let longURL = urlDatabase[short];
+  let longURL = String(urlDatabase[short].longURL);
   if (longURL !== undefined) {
     res.redirect(301, longURL);
   } else {

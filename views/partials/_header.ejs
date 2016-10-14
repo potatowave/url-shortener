@@ -1,8 +1,10 @@
 <h3 href="../urls/">URL Shrtnr</h3>
 
-<% if (userid !== undefined) { %>
+<%= [userid].email %>
+
+<% if (userid) { %>
   Hello, <%= userid %>.  <a href="/urls/new/">Create New URL</a> or
-  <form action="/urls/logout" method="POST">
+  <form action="/urls/logout" method="POST" style="display: inline;">
   <input type="submit" value="Logout">
 </form>
 <% } else { %>
