@@ -4,15 +4,18 @@
 
   <head></head>
 
-  <body style="font-size:20px; padding:50px;">
+  <body>
     <% include partials/_header %>
+    <%= JSON.stringify(urls) %>
+    <%= JSON.stringify(userid) %>
       <ul>
+
+
 
       <% let keys = Object.keys(urls) %>
       <% keys.forEach(function (key){ %>
       <li>
-      <%= urls[key] + "  " %>
-      <a href="/u/<%= key %>"><%= key %></a>
+      <a href="/u/<%= key %>"><%= key %></a><br>
       <a href="/urls/<%= key %>">Edit</a>
       <form method="POST" action="/urls/<%= key %>/delete">
       <input type="submit" value="Delete">

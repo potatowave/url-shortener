@@ -1,14 +1,12 @@
-<a href="../urls/">URL Shrtnr</a>
+<h3 href="../urls/">URL Shrtnr</h3>
 
-<br>
-
-<% if (username !== undefined) { %>
-  Hello, <%= username %>.  Logout
+<% if (userid !== undefined) { %>
+  Hello, <%= userid %>.  <a href="/urls/new/">Create New URL</a> or
+  <form action="/urls/logout" method="POST">
+  <input type="submit" value="Logout">
+</form>
 <% } else { %>
 
-<form action="/login" method="POST">
-Username <input id="" type="text" name="username" style="width: 100px">
-<input type="submit" value="Submit">
-</form>
+<a href="/urls/register">Register</a><br><br>
 
 <% } %>
