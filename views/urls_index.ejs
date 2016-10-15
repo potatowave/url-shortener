@@ -18,7 +18,7 @@
 
           <% if (urls[key].userid === userid) { %>
 
-            <a href="/urls/<%= key %>" class="w3-btn w3-teal w3-tiny">edit</a>
+            <a href="/urls/<%= key %>" class="w3-btn w3-teal w3-tiny">Edit</a>
             <form method="POST" action="/urls/<%= key %>/delete" style="display: inline;">
             <input type="submit" value="Delete" class="w3-btn w3-teal w3-tiny">
             </form>
