@@ -57,7 +57,6 @@ app.post("/urls/register", (req, res) => {
   } else {
     users[id] = { id: id, email: email, password: password };
     req.session.user_id = id;
-    console.log(users[id]);
     res.redirect('/urls');
   }
 });
@@ -111,8 +110,6 @@ app.get("/u/:shortURL", (req, res) => {
 
   let short = req.params.shortURL;
 
-  console.log(urlDatabase[short].longURL);
-
   let longURL = urlDatabase[short].longURL;
 
   if (longURL !== undefined) {
@@ -137,17 +134,14 @@ app.post("/urls/login", (req, res) => {
   keys.forEach((key) => {
 
     if (users[key].email === username) {
-      console.log("User " + username + " exists: ", users[key].email);
       if (bcrypt.compareSync(password, users[key].password)) {
 
-        console.log("User credentials accepted.");
         req.session.user_id = users[key].id;
         res.redirect("/urls/");
         return;
 
       } else {
 
-        console.log("Bad Password");
         res.redirect("/urls/");
         return;
 
@@ -188,7 +182,6 @@ app.post("/urls/:id", (req, res) => {
     let id = req.params.id;
     urlDatabase[id] = req.body.newURL;
     res.redirect(301, /urls/);
-    console.log(JSON.stringify(urlDatabase));
 
   } else {
 
