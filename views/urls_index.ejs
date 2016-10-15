@@ -3,35 +3,36 @@
 <html lang="en">
 
   <head>
-    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" href="../style.css">
   </head>
 
-  <body>
+  <body class="w3-content" style="max-width:600px">
     <% include partials/_header %>
-
 
       <% let keys = Object.keys(urls) %>
       <% keys.forEach(function (key){ %>
-      <ul>
 
-        <li>
+        <div class="w3-panel">
 
           <a href="/u/<%= key %>"><%= key %></a> ==> <%= urls[key].longURL %>
 
           <% if (urls[key].userid === userid) { %>
 
-            <a href="/urls/<%= key %>">edit</a>
+            <a href="/urls/<%= key %>" class="w3-btn w3-teal w3-tiny">edit</a>
             <form method="POST" action="/urls/<%= key %>/delete" style="display: inline;">
-            <input type="submit" value="Delete">
+            <input type="submit" value="Delete" class="w3-btn w3-teal w3-tiny">
             </form>
 
           <% } %>
 
-        </ul>
+
+        </div>
+
 
       <% }); %>
 
-      </ul>
+
+
 
       <% include partials/_footer %>
 

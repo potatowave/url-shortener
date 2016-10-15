@@ -62,6 +62,12 @@ app.post("/urls/register", (req, res) => {
   }
 });
 
+app.get("/", (req, res) => {
+
+  res.redirect('urls/');
+
+});
+
 
 app.get("/urls/register", (req, res) => {
   let templateVars = { urls: urlDatabase, userid: req.session.user_id };
@@ -75,9 +81,6 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new", templateVars);
 });
 
-// respond to gets from /urls/new (serves form)
-
-// resond to posts from /urls
 
 app.get("/urls", (req, res) => {
   let templateVars = { urls: urlDatabase, userid: req.session.user_id, users: users }
