@@ -117,7 +117,7 @@ app.get("/u/:shortURL", (req, res) => {
 
   if (longURL !== undefined) {
 
-    res.redirect(301, longURL);
+    res.redirect(302, longURL); // change to 302, as browser was caching and pointing to old URL after editing.
 
   } else {
 
