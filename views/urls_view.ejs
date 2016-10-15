@@ -5,16 +5,19 @@
   <head></head>
 
   <body>
-    <% include partials/_header %>
+  <% include partials/_header %>
+    <br><br>
     <% let keys = Object.keys(urls) %>
     <% if (urls[shortURL].userid === userid) { %>
     <form action="/urls/edit" method="POST">
-      <label for="newURL">Enter a URL:</label>
+      <label for="newURL">Modify URL:</label>
       <input id="newURL" type="text" name="newURL" placeholder="http://" style="width: 300px" value="<%= urls[shortURL].longURL %>">
       <input type="hidden" name="shortURL" value="<%= shortURL %>">
-      <input type="submit" value="<Submit>">
+      <input type="submit" value="Change">
     </form>
     <%  } %>
-    <br><a href="../u/<%= shortURL %>"><%= shortURL %></a> is currently pointing to <a href="<%= urls[shortURL].longURL %>"><%= urls[shortURL].longURL %></a>
+    <p><a href="../u/<%= shortURL %>"><%= shortURL %></a> is currently pointing to <a href="<%= urls[shortURL].longURL %>"><%= urls[shortURL].longURL %></a>
+    <br><br>
+  <% include partials/_footer %>
   </body>
 </html>

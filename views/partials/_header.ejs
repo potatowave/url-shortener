@@ -1,25 +1,11 @@
 <h3 href="../urls/">URL Shrtnr</h3>
 
-
 <% if (userid) { %>
-  Home - New URL<br>
-  Hello, <%= users[userid].email %>.  <a href="/urls/new/">Create New URL</a> or
-  <form action="/urls/logout" method="POST" style="display: inline;">
-  <input type="submit" value="Logout">
-
-</form>
+  <a href="/urls">Home</a> - <a href="/urls/new">Create New URL</a>
 
 <% } else { %>
 
-<a href="/urls/register">Register</a><br><br>
 
-    <form action="/urls/login" method="POST" style="">
-      <label for="User">Email:</label>
-      <input id="user" type="user" name="user" placeholder="" style="width: 100px">
-      <label for="password">Password:</label>
-      <input id="password" type="password" name="password" placeholder="" style="width: 100px">
-      <input type="submit" value="Log In">
-    </form>
   </body>
 </html>
 

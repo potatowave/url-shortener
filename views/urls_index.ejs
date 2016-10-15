@@ -2,7 +2,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head></head>
+  <head>
+    <link rel="stylesheet" type="text/css" href="../style.css">
+  </head>
 
   <body>
     <% include partials/_header %>
@@ -10,24 +12,29 @@
 
       <% let keys = Object.keys(urls) %>
       <% keys.forEach(function (key){ %>
+      <ul>
 
+        <li>
 
-      <% if (urls[key].userid === userid) { %>
-        <ul>
-          <li>
-            <a href="/u/<%= key %>"><%= key %></a>
-            <a href="/urls/<%= key %>">Edit</a>
+          <a href="/u/<%= key %>"><%= key %></a> ==> <%= urls[key].longURL %>
+
+          <% if (urls[key].userid === userid) { %>
+
+            <a href="/urls/<%= key %>">edit</a>
             <form method="POST" action="/urls/<%= key %>/delete" style="display: inline;">
             <input type="submit" value="Delete">
             </form>
 
-      <%  } %>
+          <% } %>
+
+        </ul>
+
+      <% }); %>
 
       </ul>
 
-      <% }) %>
-
-      </ul>
+      <% include partials/_footer %>
 
     </body>
+
 </html>

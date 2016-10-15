@@ -1,21 +1,5 @@
-Web Server:
+Here is a demo user account.  This account has some URL's associated with its ID
+in order to demonstate editing and deleting or URL's.
 
- - To access views to edit URL's
-
-
-Pages/Views:
- - List View
- - Edit View
- - Add View
-
-
-Functions:
-
- - Generate a unique ID for a tiny URL
-
-
-Dependencies:
-
- - EJS
- - request
- - body-parser
+  email: 'test@account.com'
+  password: 'lighthouse'
