@@ -21,8 +21,8 @@ var urlDatabase = {
                     "3ffdn4": { longURL: "http://www.lighthouselabs.ca", userid: "w1e6xs" },
                     "dg4Vnf": { longURL: "http://www.github.com", userid: "3k3k33" },
                     "bhxj53": { longURL: "http://www.stackoverflow.com", userid: "css5cw" },
-                    "9sm5xK": { longURL: "http://www.apple.com", userid: "w1e6xs" } ,
-                    "0fkf0d": { longURL: "http://www.microsoft.com", userid: "w1e6xs" },
+                    "9sd5xK": { longURL: "http://www.apple.com", userid: "w1e6xs" },
+                    "0fkf0d": { longURL: "http://www.apple.com", userid: "w1e6xs" },
                     "33k30d": { longURL: "http://www.raspberrypi.org", userid: "w1e6xs" }
                   };
 
@@ -42,23 +42,31 @@ app.use(express.static('public'));
 
 // respond to gets from /urls
 
-app.post("/urls/register", (req, res) => {
+app.post("/register", (req, res) => {
   const id =  String(randStr());
   let email = req.body.email;
   let plainPassword = req.body.password;
   const password = bcrypt.hashSync(plainPassword, 10);
 
-  if (!email) {
-    res.sendStatus(400);
-    return;
-  } else if (!password) {
-    res.sendStatus(400);
-    return;
+  if (req.session.user_id === undefined) {
+
+    if (!email) {
+      res.sendStatus(400);
+      return;
+    } else if (!password) {
+      res.sendStatus(400);
+      return;
+
+    } else {
+      users[id] = { id: id, email: email, password: password };
+      req.session.user_id = id;
+      res.redirect('/');
+    }
+
   } else {
-    users[id] = { id: id, email: email, password: password };
-    req.session.user_id = id;
-    res.redirect('/urls');
+    res.redirect('/');
   }
+
 });
 
 app.get("/", (req, res) => {
@@ -67,23 +75,32 @@ app.get("/", (req, res) => {
 
 });
 
-
-app.get("/urls/register", (req, res) => {
+app.get("/register", (req, res) => {
   let templateVars = { urls: urlDatabase, userid: req.session.user_id };
   res.render("urls_register", templateVars);
 });
 
-
-
 app.get("/urls/new", (req, res) => {
   let templateVars = { shortURL: req.params.id, userid: req.session.user_id,  urls: urlDatabase, users : users};
-  res.render("urls_new", templateVars);
+
+  if (templateVars.userid !== undefined) {
+
+    res.render("urls_new", templateVars);
+
+  } else {
+
+    res.send("You are not logged in.  Please <a href=\"/urls\">login</a> or <a href=\"/register\">register.</a>", 401);
+
+  }
+
 });
 
-
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase, userid: req.session.user_id, users: users }
-  res.render("urls_index", templateVars);
+
+  let templateVars = { urls: urlDatabase, userid: req.session.user_id, users: users };
+
+    res.render("urls_index", templateVars);
+
 });
 
 app.post("/urls", (req, res) => {
@@ -97,33 +114,53 @@ app.post("/urls/edit", (req, res) => {
   const tinyString = req.body.shortURL;
   const newURL = req.body.newURL;
   urlDatabase[tinyString].longURL = newURL ;
-  res.redirect('/urls/');
+  res.redirect('/');
 });
 
-app.get("/url/:shortURL", (req, res) => {
-  let templateVars = { urls: urlDatabase, userid: req.session.user_id, users: users };
-  res.render("urls_view", templateVars);
-});
+app.get("/urls/:shortURL", (req, res) => {
 
+  let shortURL = req.params.shortURL;
+  let templateVars = { urls: urlDatabase, userid: req.session.user_id, shortURL: shortURL, users:users };
+
+  if (templateVars.userid !== templateVars.urls[shortURL].userid && templateVars.userid !== undefined) {
+
+    res.send("Forbidden.  You cannot edit this.", 403);
+
+  } else if (templateVars.userid === undefined) {
+
+    res.send("You are not logged in.  Please <a href=\"/urls\">login</a> or <a href=\"/register\">register.</a>", 401);
+
+  } else if (req.params.shortURL in templateVars.urls && templateVars.userid !== undefined) {
+
+    res.render("urls_view", templateVars);
+
+  }
+
+});
 
 app.get("/u/:shortURL", (req, res) => {
 
-  let short = req.params.shortURL;
+  let shortURL = req.params.shortURL;
 
-  let longURL = urlDatabase[short].longURL;
+  console.log(req.params.shortURL);
 
-  if (longURL !== undefined) {
+  if (shortURL in urlDatabase) {
+
+    let longURL = urlDatabase[shortURL].longURL;
+
+    console.log(longURL);
 
     res.redirect(302, longURL); // change to 302, as browser was caching and pointing to old URL after editing.
 
   } else {
 
-    res.send("Re-direct does not exist or no URL to point to!");
+    res.send("404 not found. Re-direct does not exist or no URL to point to!", 404);
+
   }
 
 });
 
-app.post("/urls/login", (req, res) => {
+app.post("/login", (req, res) => {
 
   let username = req.body.user;
   let password = req.body.password;
@@ -134,16 +171,15 @@ app.post("/urls/login", (req, res) => {
   keys.forEach((key) => {
 
     if (users[key].email === username) {
+
       if (bcrypt.compareSync(password, users[key].password)) {
 
         req.session.user_id = users[key].id;
-        res.redirect("/urls/");
-        return;
+        res.redirect("/");
 
       } else {
 
-        res.redirect("/urls/");
-        return;
+        res.send("Unsuccesful login!", 401);
 
       }
 
@@ -153,10 +189,10 @@ app.post("/urls/login", (req, res) => {
 
 });
 
-app.post("/urls/logout", (req, res) => {
+app.post("/logout", (req, res) => {
 
   req.session = null;
-  res.redirect("/urls/");
+  res.redirect("/");
 
 });
 

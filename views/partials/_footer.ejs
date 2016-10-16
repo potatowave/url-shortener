@@ -1,20 +1,20 @@
 <div class="w3-panel w3-teal"><br>
 <% if (userid) { %>
   Logged in as <%= users[userid].email %>.
-  <form action="/urls/logout" method="POST" style="display: inline;">
+  <form action="/logout" method="POST" style="display: inline;">
   <input type="submit" value="Logout">
 
   </form><br><br>
 
 <% } else { %>
 
-    <form action="/urls/login" method="POST" style="">
+    <form action="/login" method="POST" style="">
       <label for="User">Email:</label>
       <input id="user" type="user" name="user" placeholder="" style="width: 150px">
       <label for="password">Password:</label>
       <input id="password" type="password" name="password" placeholder="" style="width: 100px">
       <input type="submit" value="Log In" style="display: inline;"> &nbsp;&nbsp;
-      <a href="/urls/register">Register</a>
+      <a href="/register">Register</a>
     </form><br>
 <% } %>
 

@@ -11,13 +11,15 @@
     <% include partials/_header %>
 
       <% let keys = Object.keys(urls) %>
-      <% keys.forEach(function (key){ %>
+
+        <% keys.forEach(function (key){ %>
 
         <div class="w3-panel">
 
           <a href="/u/<%= key %>"><%= key %></a> ==> <%= urls[key].longURL %>
 
           <% if (urls[key].userid === userid) { %>
+
             &nbsp;&nbsp;
             <a href="/urls/<%= key %>" class="w3-btn w3-teal w3-tiny">Edit</a>
             <form method="POST" action="/urls/<%= key %>/delete" style="display: inline;">
@@ -31,7 +33,6 @@
 
 
       <% }); %>
-
 
 
 
