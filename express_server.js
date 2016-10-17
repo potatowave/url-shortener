@@ -142,13 +142,9 @@ app.get("/u/:shortURL", (req, res) => {
 
   let shortURL = req.params.shortURL;
 
-  console.log(req.params.shortURL);
-
   if (shortURL in urlDatabase) {
 
     let longURL = urlDatabase[shortURL].longURL;
-
-    console.log(longURL);
 
     res.redirect(302, longURL); // change to 302, as browser was caching and pointing to old URL after editing.
 
