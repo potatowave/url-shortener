@@ -18,7 +18,7 @@
 
           <a href="/u/<%= key %>"><%= key %></a> ==> <%= urls[key].longURL %>
 
-          <% if (urls[key].userid === userid) { %>
+          <% if (userid in users && urls[key].userid === userid) { %>
 
             &nbsp;&nbsp;
             <a href="/urls/<%= key %>" class="w3-btn w3-teal w3-tiny">Edit</a>

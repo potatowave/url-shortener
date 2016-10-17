@@ -1,5 +1,5 @@
 <div class="w3-panel w3-teal"><br>
-<% if (userid) { %>
+<% if (userid !== undefined && userid in users) { %>
   Logged in as <%= users[userid].email %>.
   <form action="/logout" method="POST" style="display: inline;">
   <input type="submit" value="Logout">
